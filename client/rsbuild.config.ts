@@ -11,16 +11,10 @@ export default defineConfig({
       },
     }),
   ],
-  source: {
-    entry: {
-      main: './src/index.ts',
-    },
-  },
+  
   server: {
     port: 5173
    
   },
-  build: {
-    outDir: 'dist',
-  },
+  
 });

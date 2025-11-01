@@ -22,19 +22,31 @@
 
   const { form } = createForm({
     onSubmit: async (values: { text: string }) => {
-      await ky.post('/todos', { json: values });
+      await ky.post('http://localhost:3000/todos', { 
+        json: values,
+        credentials: "include"
+      });
       await fetchTodos();
     },
   });
 
   const toggle = async (id: string) => {
-    await ky.patch(`/todos/${id}/toggle`);
+    await ky.patch(`http://localhost:3000/todos/${id}/toggle`, {
+      credentials: "include"
+    });
     await fetchTodos();
   };
 
   const remove = async (id: string) => {
-    await ky.delete(`/todos/${id}`);
-    await fetchTodos();
+    try {
+      await ky.delete(`http://localhost:3000/todos/${id}`, {
+        credentials: "include"
+      });
+      await fetchTodos();
+    } catch (err: any) {
+      console.error('Error deleting todo:', err);
+      alert('Ошибка при удалении задачи: ' + (err.message || 'Неизвестная ошибка'));
+    }
   };
 </script>
 
@@ -50,7 +62,7 @@
     <TodoItem {todo} on:toggle={() => toggle(todo.id)} on:remove={() => remove(todo.id)} />
   {/each}
 </ul>
-
+  
 <style>
   form {
     display: flex;
