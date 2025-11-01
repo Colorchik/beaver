@@ -10,11 +10,8 @@ const todosRoutes = require("./router/todo.router");
 fastify.register(require('@fastify/cors'), {
   origin: ["http://localhost:5173"],
   credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+  methods: ['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
 });
-
-fastify.register(require('@fastify/sensible'))
-fastify.register(require('@fastify/cookie'));
 
 fastify.register(todosRoutes);
 
