@@ -18,7 +18,7 @@
 
   onMount(fetchTodos);
 
-  const { form } = createForm({
+   const { form } = createForm({
     onSubmit: async (values: { text: string }) => {
       await ky.post('/api/todos', { json: values });
       await fetchTodos();
