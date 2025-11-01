@@ -4,8 +4,19 @@ const mongoose = require('mongoose');
 
 exports.getTodos = async (req, reply) => {
   try {
-    const todos = await prisma.todos.findMany();
-    reply.send(todos);
+    const db = getDB();
+    const todosCollection = db.collection('todos');
+    const todos = await todosCollection.find({}).toArray();
+    
+    const formattedTodos = todos.map(todo => ({
+      id: todo._id.toString(),
+      text: todo.text,
+      done: todo.done || false,
+      createdAt: todo.createdAt,
+      updatedAt: todo.updatedAt,
+    }));
+    
+    reply.send(formattedTodos);
   } catch (err) {
     reply.status(500).send({ message: err.message || "Произошла ошибка при получении задач." });
   }
@@ -134,20 +145,27 @@ exports.toggleTodo = async (req, reply) => {
       return reply.status(404).send({ message: "Задача не найдена." });
     }
     
+    const newDoneValue = !currentTodo.done;
+    
     const result = await todosCollection.findOneAndUpdate(
       { _id: objectId },
       { 
         $set: { 
-          done: !currentTodo.done,
+          done: newDoneValue,
           updatedAt: new Date()
         } 
       },
       { returnDocument: 'after' }
     );
     
+    if (!result.value) {
+      return reply.status(404).send({ message: "Задача не найдена после обновления." });
+    }
+    
     const updatedTodo = {
       id: result.value._id.toString(),
-      ...result.value,
+      text: result.value.text,
+      done: result.value.done,
       createdAt: result.value.createdAt,
       updatedAt: result.value.updatedAt,
     };

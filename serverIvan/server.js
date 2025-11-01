@@ -15,6 +15,7 @@ fastify.register(require('@fastify/cors'), {
 
 fastify.register(require('@fastify/sensible'))
 fastify.register(require('@fastify/cookie'));
+
 fastify.register(todosRoutes);
 
 fastify.get('/', async (request, reply) => {

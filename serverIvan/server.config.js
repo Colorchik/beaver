@@ -13,7 +13,7 @@ module.exports = async (fastify, options) => {
     await fastify.register(cookie);
 
   } catch (err) {
-    console.error("Всё сломалось:", err);
+    console.error("CORS configuration error:", err);
     throw err;
   }
 

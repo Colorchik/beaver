@@ -2,7 +2,7 @@
   import { createForm } from 'felte';
   import ky from 'ky';
   import { onMount } from 'svelte';
-  import TodoItem from '../components/TodoItem.svelte';
+  import TodoItem from '../components/ToDoItem.svelte';
 
   interface Todo {
     id: string;
@@ -31,10 +31,14 @@
   });
 
   const toggle = async (id: string) => {
-    await ky.patch(`http://localhost:3000/todos/${id}/toggle`, {
-      credentials: "include"
-    });
-    await fetchTodos();
+    try {
+      await ky.patch(`http://localhost:3000/todos/${id}/toggle`, {
+        credentials: "include"
+      });
+      await fetchTodos();
+    } catch (err: any) {
+      await fetchTodos();
+    }
   };
 
   const remove = async (id: string) => {
@@ -44,8 +48,7 @@
       });
       await fetchTodos();
     } catch (err: any) {
-      console.error('Error deleting todo:', err);
-      alert('Ошибка при удалении задачи: ' + (err.message || 'Неизвестная ошибка'));
+      await fetchTodos();
     }
   };
 </script>
@@ -59,7 +62,7 @@
 
 <ul>
   {#each todos as todo (todo.id)}
-    <TodoItem {todo} on:toggle={() => toggle(todo.id)} on:remove={() => remove(todo.id)} />
+    <TodoItem {todo} toggle={() => toggle(todo.id)} remove={() => remove(todo.id)} />
   {/each}
 </ul>
   
