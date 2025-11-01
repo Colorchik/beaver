@@ -33,6 +33,7 @@
   const toggle = async (id: string) => {
     try {
       await ky.patch(`http://localhost:3000/todos/${id}/toggle`, {
+        json: values,
         credentials: "include"
       });
       await fetchTodos();
