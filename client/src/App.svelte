@@ -1,28 +1,56 @@
+<script lang="ts">
+  import Home from './pages/Home.svelte';
+  import Todos from './pages/Todos.svelte';
+  import About from './pages/About.svelte';
+
+  let route = '/';
+
+  const navigate = (path: string) => {
+    route = path;
+    history.pushState({}, '', path);
+  };
+
+  window.addEventListener('popstate', () => {
+    route = location.pathname;
+  });
+</script>
+
+<nav>
+  <a href="/" on:click|preventDefault={() => navigate('/')}>🏠 Home</a>
+  <a href="/todos" on:click|preventDefault={() => navigate('/todos')}>✅ Todos</a>
+  <a href="/about" on:click|preventDefault={() => navigate('/about')}>ℹ️ About</a>
+</nav>
+
 <main>
-  <div class="content">
-    <h1>Rsbuild with Svelte</h1>
-    <p>Start building amazing things with Rsbuild.</p>
-  </div>
+  {#if route === '/'}
+    <Home />
+  {:else if route === '/todos'}
+    <Todos />
+  {:else if route === '/about'}
+    <About />
+  {:else}
+    <h2>404 — Not found</h2>
+  {/if}
 </main>
 
 <style>
-.content {
-  display: flex;
-  min-height: 100vh;
-  line-height: 1.1;
-  text-align: center;
-  flex-direction: column;
-  justify-content: center;
-}
-
-.content h1 {
-  font-size: 3.6rem;
-  font-weight: 700;
-}
-
-.content p {
-  font-size: 1.2rem;
-  font-weight: 400;
-  opacity: 0.5;
-}
+  nav {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    padding: 1rem;
+    background: #fafafa;
+    border-bottom: 1px solid #ddd;
+  }
+  a {
+    color: #333;
+    text-decoration: none;
+    font-weight: bold;
+  }
+  a:hover { color: #0077ff; }
+  main {
+    max-width: 600px;
+    margin: 2rem auto;
+    font-family: sans-serif;
+  }
 </style>

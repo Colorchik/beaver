@@ -1,12 +1,10 @@
-import { mount } from 'svelte';
 import App from './App.svelte';
-import './index.css';
 
-const app = mount(App, {
-  target: document.body,
-  props: {
-    name: 'world',
-  },
-});
+// Находим DOM-элемент, куда монтируем приложение
+const target = document.getElementById('root');
+if (!target) throw new Error('#root not found');
+
+// Монтируем приложение
+const app = new App({ target });
 
 export default app;
