@@ -2,7 +2,7 @@
   import { createForm } from 'felte';
   import ky from 'ky';
   import { onMount } from 'svelte';
-  import TodoItem from '../components/TodoItem.svelte';
+  import TodoItem from '../components/ToDoItem.svelte';
 
   interface Todo {
     id: string;
@@ -13,26 +13,43 @@
   let todos: Todo[] = [];
 
   const fetchTodos = async () => {
-    todos = await ky.get('/api/todos').json();
+    todos = await ky.get('http://localhost:3000/todos', {
+      credentials: "include"
+    }).json();
   };
 
   onMount(fetchTodos);
 
   const { form } = createForm({
     onSubmit: async (values: { text: string }) => {
-      await ky.post('/api/todos', { json: values });
+      await ky.post('http://localhost:3000/todos', { 
+        json: values,
+        credentials: "include"
+      });
       await fetchTodos();
     },
   });
 
   const toggle = async (id: string) => {
-    await ky.patch(`/api/todos/${id}/toggle`);
-    await fetchTodos();
+    try {
+      await ky.patch(`http://localhost:3000/todos/${id}/toggle`, {
+        credentials: "include"
+      });
+      await fetchTodos();
+    } catch (err: any) {
+      await fetchTodos();
+    }
   };
 
   const remove = async (id: string) => {
-    await ky.delete(`/api/todos/${id}`);
-    await fetchTodos();
+    try {
+      await ky.delete(`http://localhost:3000/todos/${id}`, {
+        credentials: "include"
+      });
+      await fetchTodos();
+    } catch (err: any) {
+      await fetchTodos();
+    }
   };
 </script>
 
@@ -45,10 +62,10 @@
 
 <ul>
   {#each todos as todo (todo.id)}
-    <TodoItem {todo} on:toggle={() => toggle(todo.id)} on:remove={() => remove(todo.id)} />
+    <TodoItem {todo} toggle={() => toggle(todo.id)} remove={() => remove(todo.id)} />
   {/each}
 </ul>
-
+  
 <style>
   form {
     display: flex;

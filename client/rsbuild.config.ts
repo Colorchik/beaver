@@ -11,17 +11,10 @@ export default defineConfig({
       },
     }),
   ],
-  source: {
-    entry: {
-      main: './src/index.ts',
-    },
-  },
+  
   server: {
-    port: 5173,
-    proxy: { '/api': 'http://localhost:3000' },
-    historyFallback: true, // 👈 добавляем fallback на index.html
+    port: 5173
+   
   },
-  build: {
-    outDir: 'dist',
-  },
+  
 });
