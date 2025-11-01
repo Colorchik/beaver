@@ -13,25 +13,25 @@
   let todos: Todo[] = [];
 
   const fetchTodos = async () => {
-    todos = await ky.get('/api/todos').json();
+    todos = await ky.get('/todos').json();
   };
 
   onMount(fetchTodos);
 
   const { form } = createForm({
     onSubmit: async (values: { text: string }) => {
-      await ky.post('/api/todos', { json: values });
+      await ky.post('/todos', { json: values });
       await fetchTodos();
     },
   });
 
   const toggle = async (id: string) => {
-    await ky.patch(`/api/todos/${id}/toggle`);
+    await ky.patch(`/todos/${id}/toggle`);
     await fetchTodos();
   };
 
   const remove = async (id: string) => {
-    await ky.delete(`/api/todos/${id}`);
+    await ky.delete(`/todos/${id}`);
     await fetchTodos();
   };
 </script>
