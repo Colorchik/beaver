@@ -13,7 +13,9 @@
   let todos: Todo[] = [];
 
   const fetchTodos = async () => {
-    todos = await ky.get('/todos').json();
+    todos = await ky.get('http://localhost:3000/todos', {
+      credentials: "include"
+    }).json();
   };
 
   onMount(fetchTodos);

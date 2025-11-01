@@ -11,8 +11,9 @@ mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log("Подключились к Монго..."))
   .catch(err => console.error("Ошибка c Монго", err));
 
+fastify.register(require('@fastify/sensible'))
+fastify.register(require('@fastify/formbody'))  
 fastify.register(config);
-
 fastify.register(todosRoutes);
 
 fastify.get('/', async (request, reply) => {

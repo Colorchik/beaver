@@ -5,8 +5,10 @@ module.exports = async (fastify, options) => {
 
   try {
     await fastify.register(cors, {
-      origin: ["http://localhost:3000"],
-      credentials: true
+      origin: ["http://localhost:5173/main"],
+      credentials: true,
+      methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+
     });
     await fastify.register(cookie);
 
