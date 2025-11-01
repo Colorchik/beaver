@@ -1,7 +1,19 @@
+require('dotenv').config();
+
 const fastify = require("fastify")();
 const config = require("./server.config");
 
+const todosRoutes = require("./router/todo.router");
+
+const mongoose = require("mongoose");
+
+mongoose.connect(process.env.MONGO_URI)
+  .then(() => console.log("Подключились к Монго..."))
+  .catch(err => console.error("Ошибка c Монго", err));
+
 fastify.register(config);
+
+fastify.register(todosRoutes);
 
 fastify.get('/', async (request, reply) => {
   return "Hello, world!"

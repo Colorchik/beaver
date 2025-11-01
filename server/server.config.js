@@ -14,5 +14,5 @@ module.exports = async (fastify, options) => {
     console.error("Всё сломалось:", err);
     throw err;
   }
-  
+
 };
